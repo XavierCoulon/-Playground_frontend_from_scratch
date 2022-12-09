@@ -21,6 +21,7 @@ function CreateBook() {
       .post("http://localhost:5000/api/v1/book", {
         title: data.title,
         content: data.content,
+        picture: data.picture,
         categoryId: data.category,
         authorId: data.author,
       })
@@ -81,6 +82,15 @@ function CreateBook() {
             {errors.content?.message}
           </p>
         )}
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Image
+        </label>
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="image"
+          type="text"
+          {...register("picture")}
+        />
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="user-select"

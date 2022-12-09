@@ -1,9 +1,32 @@
 import axios from "axios";
 import { useQuery } from "react-query";
+import Card from "./Card";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 const fetchBooks = async () => {
   const { data } = await axios.get("http://localhost:5000/api/v1/book");
   return data;
+};
+
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
 };
 
 function BooksList() {
@@ -16,14 +39,12 @@ function BooksList() {
       <h1 className="block text-gray-700 text-lg font-bold mb-2">
         List of books
       </h1>
-      <ul>
+
+      <Carousel responsive={responsive} autoPlay={true} infinite={true} autoPlaySpeed={1000}>
         {data.map((book) => (
-          <li key={book.id}>
-            {book.title} - {book.content} - {book.category.name} -{" "}
-            {book.author.name}
-          </li>
+          <Card book={book} />
         ))}
-      </ul>
+      </Carousel>
     </div>
   );
 }
