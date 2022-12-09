@@ -1,6 +1,18 @@
+import axios from "axios";
 import React from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 function Card({ book }) {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation(
+    () => axios.delete(`http://localhost:5000/api/v1/book/${book.id}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["books"]);
+      },
+    }
+  );
+
   return (
     <div className="flex flex-col w-80 rounded overflow-hidden shadow-lg">
       <img className="" src={book.picture} alt={book.title} />
@@ -14,8 +26,11 @@ function Card({ book }) {
         <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           {book.category.name}
         </span>
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          {book.content}
+        <span
+          onClick={() => mutate()}
+          className="cursor-pointer inline-block bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+        >
+          🗑️
         </span>
       </div>
     </div>

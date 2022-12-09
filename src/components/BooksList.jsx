@@ -17,7 +17,7 @@ const responsive = {
   },
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3,
+    items: 5,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
@@ -40,7 +40,7 @@ function BooksList() {
         List of books
       </h1>
 
-      <Carousel responsive={responsive} autoPlay={true} infinite={true} autoPlaySpeed={1000}>
+      <Carousel responsive={responsive} infinite={true}>
         {data.map((book) => (
           <Card book={book} />
         ))}

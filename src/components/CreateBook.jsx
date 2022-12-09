@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useForm } from "react-hook-form";
 
 function CreateBook() {
@@ -12,20 +12,29 @@ function CreateBook() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    axios
-      .post("http://localhost:5000/api/v1/book", {
+  const { mutate } = useMutation(
+    (data) =>
+      axios.post("http://localhost:5000/api/v1/book", {
         title: data.title,
         content: data.content,
         picture: data.picture,
         categoryId: data.category,
         authorId: data.author,
-      })
-      .then(() => queryClient.invalidateQueries(["books"]));
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["books"]);
+        reset();
+      },
+    }
+  );
+
+  const onSubmit = (data) => {
+    mutate(data);
   };
 
   const fetchCategories = async () => {
